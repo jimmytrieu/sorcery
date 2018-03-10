@@ -104,8 +104,9 @@ module Sorcery
               uri.query = nil
               uri.scheme = 'https' if request.env['HTTP_X_FORWARDED_PROTO'] == 'https'
               host = uri.to_s
-              provider.callback_url = "#{host}#{@provider.original_callback_url}" + "?current_client_id=" + args[:current_client_id].to_s
+              provider.callback_url = "#{host}#{@provider.original_callback_url}"
             end
+            provider.callback_url = provider.callback_url + "?current_client_id=" + args[:current_client_id].to_s
           end
 
           # sends user to authenticate at the provider's website.
