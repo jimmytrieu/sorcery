@@ -63,7 +63,7 @@ module Sorcery
           # does not provide a login URL.  (as of v0.8.1 all providers provide a login URL)
           def sorcery_login_url(provider_name, args = {})
             @provider = sorcery_get_provider provider_name
-            sorcery_fixup_callback_url @provider
+            sorcery_fixup_callback_url @provider, args
             if @provider.respond_to?(:login_url) && @provider.has_callback?
               @provider.state = args[:state]
               return @provider.login_url(params, session)
@@ -96,7 +96,7 @@ module Sorcery
           end
 
           # this method should be somewhere else.  It only does something once per application per provider.
-          def sorcery_fixup_callback_url(provider)
+          def sorcery_fixup_callback_url(provider, args = {})
             provider.original_callback_url ||= provider.callback_url
             if provider.original_callback_url.present? && provider.original_callback_url[0] == '/'
               uri = URI.parse(request.url.gsub(/\?.*$/, ''))
@@ -104,7 +104,7 @@ module Sorcery
               uri.query = nil
               uri.scheme = 'https' if request.env['HTTP_X_FORWARDED_PROTO'] == 'https'
               host = uri.to_s
-              provider.callback_url = "#{host}#{@provider.original_callback_url}"
+              provider.callback_url = "#{host}#{@provider.original_callback_url}" + "?current_client_id=" + args[:current_client_id].to_s
             end
           end
 
