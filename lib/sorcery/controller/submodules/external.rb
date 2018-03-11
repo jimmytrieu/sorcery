@@ -66,6 +66,7 @@ module Sorcery
             sorcery_fixup_callback_url @provider, args
             if @provider.respond_to?(:login_url) && @provider.has_callback?
               @provider.state = args[:state]
+              @provider.current_client_id = args[:current_client_id]
               return @provider.login_url(params, session)
             else
               return nil
