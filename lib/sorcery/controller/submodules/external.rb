@@ -65,8 +65,7 @@ module Sorcery
             @provider = sorcery_get_provider provider_name
             sorcery_fixup_callback_url @provider, args
             if @provider.respond_to?(:login_url) && @provider.has_callback?
-              @provider.state = args[:state]
-              @provider.current_client_id = args[:current_client_id]
+              @provider.state = args[:current_client_id]
               return @provider.login_url(params, session)
             else
               return nil
@@ -107,11 +106,6 @@ module Sorcery
               host = uri.to_s
               provider.callback_url = "#{host}#{@provider.original_callback_url}"
             end
-            puts args[:current_client_id].to_s
-            provider.callback_url = provider.callback_url + args[:current_client_id].to_s
-            provider.original_callback_url = provider.original_callback_url + args[:current_client_id].to_s
-            puts provider.callback_url
-            puts provider.original_callback_url
           end
 
           # sends user to authenticate at the provider's website.
