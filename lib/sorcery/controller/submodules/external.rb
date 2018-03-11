@@ -107,8 +107,11 @@ module Sorcery
               host = uri.to_s
               provider.callback_url = "#{host}#{@provider.original_callback_url}"
             end
+            puts args[:current_client_id].to_s
             provider.callback_url = provider.callback_url + args[:current_client_id].to_s
             provider.original_callback_url = provider.original_callback_url + args[:current_client_id].to_s
+            puts provider.callback_url
+            puts provider.original_callback_url
           end
 
           # sends user to authenticate at the provider's website.
